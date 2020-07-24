@@ -57,6 +57,7 @@ install_requires =  setup_requires + ['Mako>=1.0.1',
                       'ligo-segments',
                       'tqdm',
                       'gwdatafind',
+                      'sympy'
                       ]
 
 def find_files(dirname, relpath=None):

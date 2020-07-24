@@ -21,6 +21,7 @@ lscsoft-glue>=1.59.3
 ligo-segments
 tqdm
 gwdatafind
+sympy
 
 # Requirements for ligoxml access needed by some workflows
 python-ligo-lw
