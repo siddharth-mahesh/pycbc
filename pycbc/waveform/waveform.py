@@ -475,26 +475,26 @@ def get_td_bob_waveform(mass1,mass2,spin1x,spin1y,spin1z,spin2x,spin2y,spin2z,de
     hp , hc = get_td_waveform(mass1 = mass1,mass2 = mass2,spin1x = spin1x,spin1y = spin1y, spin1z = spin1z,spin2x = spin2x,spin2y = spin2y,spin2z = spin2z,approximant= approximant,delta_t= delta_t, f_lower= f_lower)
     finstate = lalsimulation.SimIMREOBFinalMassSpin(mass1,mass2,[spin1x,spin1y,spin1z],[spin2x,spin2y,spin2z],getattr(lalsimulation,approximant))
     mf , af = (mass1 + mass2)*finstate[1] , finstate[2]
-    Omega_QNM , tau = np.pi*freq_from_final_mass_spin(mf,af) , tau_from_final_mass_spin(mf,af)
+    Omega_QNM , tau = numpy.pi*freq_from_final_mass_spin(mf,af) , tau_from_final_mass_spin(mf,af)
     phase = phase_from_polarizations(hp,hc,remove_start_phase = False)
     Phase = phase/2
-    Omega = np.gradient(Phase,phase.sample_times)
-    Omega_dot = np.gradient(Omega,phase.sample_times)
-    reftime_index = np.abs(np.array(hp.sample_times) + 10*(mass1+mass2)*mtsun_si).argmin()
+    Omega = numpy.gradient(Phase,phase.sample_times)
+    Omega_dot = numpy.gradient(Omega,phase.sample_times)
+    reftime_index = numpy.abs(numpy.array(hp.sample_times) + 10*(mass1+mass2)*mtsun_si).argmin()
     t_0 = hp.sample_times[reftime_index]
     Omega_0 , Omega_dot_0 = Omega[reftime_index] , Omega_dot[reftime_index]
-    h_0 = np.sqrt(hp[reftime_index]**2 + hc[reftime_index]**2)
-    bob_times = np.array(hp.sample_times[reftime_index:])
+    h_0 = numpy.sqrt(hp[reftime_index]**2 + hc[reftime_index]**2)
+    bob_times = numpy.array(hp.sample_times[reftime_index:])
     H = bob.strain_amplitude(bob_times,t_0,Omega_0,Omega_dot_0,Omega_QNM,h_0,tau)
     Phi = 2*bob.phase(bob_times,t_0,Omega_0,Omega_dot_0,Omega_QNM,tau)
     Phi = Phi - Phi[0] + phase[reftime_index]
     for i in range(reftime_index,len(hp)):
-        if (np.isfinite(Phi[i-reftime_index]) == False) or (H[i-reftime_index] < 1e-40):
+        if (numpy.isfinite(Phi[i-reftime_index]) == False) or (H[i-reftime_index] < 1e-40):
             end_index = i
             break
-        hp[i] = H[i-reftime_index]*np.cos(Phi[i-reftime_index])
-        hc[i] = H[i-reftime_index]*np.sin(Phi[i-reftime_index])
-    return TimeSeries(np.array(hp[:end_index]),delta_t,hp.sample_times[0]),TimeSeries(np.array(hc[:end_index]),delta_t,hp.sample_times[0])
+        hp[i] = H[i-reftime_index]*numpy.cos(Phi[i-reftime_index])
+        hc[i] = H[i-reftime_index]*numpy.sin(Phi[i-reftime_index])
+    return TimeSeries(numpy.array(hp[:end_index]),delta_t,hp.sample_times[0]),TimeSeries(numpy.array(hc[:end_index]),delta_t,hp.sample_times[0])
 
 get_td_waveform.__doc__ = get_td_waveform.__doc__.format(
     params=parameters.td_waveform_params.docstr(prefix="    ",
